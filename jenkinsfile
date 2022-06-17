@@ -41,7 +41,7 @@ pipeline {
                 }
             }
         }
-        stage('Deploy Image') {
+        stage('Publish Image') {
             steps {
                 script {
                     docker.withRegistry("https://$env.AWS_ECR_REGISTRY", "ecr:$env.AWS_REGION:ry-aws-credentials") {
