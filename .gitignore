@@ -48,3 +48,7 @@ local.properties
 .settings/
 .loadpath
 .recommenders
+
+
+*.log
+*.sh
