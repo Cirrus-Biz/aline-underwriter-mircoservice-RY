@@ -49,6 +49,6 @@ local.properties
 .loadpath
 .recommenders
 
-
+*.env
 *.log
 *.sh
