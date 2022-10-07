@@ -43,29 +43,29 @@ pipeline {
         //         waitForQualityGate abortPipeline: true
         //     }
         // }
-        stage('Package') { 
-            steps {
-                sh 'mvn -Dmaven.test.failure.ignore=true clean package' 
-            }
-        }
-        stage('Build') {
-            steps {
-                script {
-                    dockerImage = docker.build "$env.AWS_ECR_REGISTRY" + "/" + registryEndpoint + ":${GIT_COMMIT}"
-                    dockerImage2 = docker.build "$env.AWS_ECR_REGISTRY" + "/" + registryEndpoint + ":latest"
-                }
-            }
-        }
-        stage('Publish to ECR') {
-            steps{
-                script {
-                    docker.withRegistry("https://$env.AWS_ECR_REGISTRY", "ecr:us-east-1:ry-aws-credentials") {
-                        dockerImage.push()
-                        dockerImage2.push()
-                    }
-                }
-            }
-        }
+        // stage('Package') { 
+        //     steps {
+        //         sh 'mvn -Dmaven.test.failure.ignore=true clean package' 
+        //     }
+        // }
+        // stage('Build') {
+        //     steps {
+        //         script {
+        //             dockerImage = docker.build "$env.AWS_ECR_REGISTRY" + "/" + registryEndpoint + ":${GIT_COMMIT}"
+        //             dockerImage2 = docker.build "$env.AWS_ECR_REGISTRY" + "/" + registryEndpoint + ":latest"
+        //         }
+        //     }
+        // }
+        // stage('Publish to ECR') {
+        //     steps{
+        //         script {
+        //             docker.withRegistry("https://$env.AWS_ECR_REGISTRY", "ecr:us-east-1:ry-aws-credentials") {
+        //                 dockerImage.push()
+        //                 dockerImage2.push()
+        //             }
+        //         }
+        //     }
+        // }
         stage('Docker Hard Clean') {
             when {
                 environment(name: "deployment", value: "ECS")
@@ -171,12 +171,13 @@ pipeline {
                 environment(name: "deployment", value: "EKS")
             }
             steps {
-                sh 'kubectl apply -f ${eks_secrets}'
-                sh 'kubectl apply -f aline-eks-ry/deployments'
-                sh 'kubectl apply -f aline-eks-ry/deployments/ingress'
-                sh '. aline-eks-ry/eks-path-changes.sh'
-                sh 'kubectl get ingress'
-                sh 'kubectl set image deployment/${MS} ${MS}=${ecr_url}${registryEndpoint}:${GIT_COMMIT}'
+                sh 'eksctl delete cluster my-eks-ry'
+                // sh 'kubectl apply -f ${eks_secrets}'
+                // sh 'kubectl apply -f aline-eks-ry/deployments'
+                // sh 'kubectl apply -f aline-eks-ry/deployments/ingress'
+                // sh '. aline-eks-ry/eks-path-changes.sh'
+                // sh 'kubectl get ingress'
+                // sh 'kubectl set image deployment/${MS} ${MS}=${ecr_url}${registryEndpoint}:${GIT_COMMIT}'
             }
         }
     }
