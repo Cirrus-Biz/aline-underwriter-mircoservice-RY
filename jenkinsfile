@@ -171,7 +171,7 @@ pipeline {
                 environment(name: "deployment", value: "EKS")
             }
             steps {
-                sh 'eksctl delete cluster my-eks-ry'
+                sh 'cd aline-eks-ry && eksctl delete cluster my-eks-ry'
                 // sh 'kubectl apply -f ${eks_secrets}'
                 // sh 'kubectl apply -f aline-eks-ry/deployments'
                 // sh 'kubectl apply -f aline-eks-ry/deployments/ingress'
